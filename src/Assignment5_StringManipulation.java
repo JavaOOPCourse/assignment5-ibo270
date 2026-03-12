@@ -1,4 +1,8 @@
+import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Assignment5_StringManipulation {
 
@@ -52,6 +56,16 @@ public class Assignment5_StringManipulation {
 
         // TODO: Подсчитать количество гласных (a, e, i, o, u)
         int count = 0;
+        HashSet<Character> vowels = new HashSet<>();
+        for (char c : "aeiouAEIOU".toCharArray()) {
+            vowels.add(c);
+        }
+
+        for (char c : input.toCharArray()) {
+            if (vowels.contains(c)) {
+                count++;
+            }
+        }
 
         System.out.println("Number of vowels: " + count);
     }
@@ -62,7 +76,14 @@ public class Assignment5_StringManipulation {
         String input = scanner.nextLine();
 
         // TODO: Вывести строку в обратном порядке
-        String reversed = "";
+        ArrayDeque<Character> deque = new ArrayDeque<>();
+        for (char c : input.toCharArray()) {
+            deque.addFirst(c);
+        }
+        StringBuilder reversed = new StringBuilder();
+        while (!deque.isEmpty()) {
+            reversed.append(deque.removeFirst());
+        }
 
         System.out.println(reversed);
     }
@@ -73,7 +94,17 @@ public class Assignment5_StringManipulation {
         String input = scanner.nextLine();
 
         // TODO: Проверить, является ли строка палиндромом (игнорировать регистр)
-        boolean isPalindrome = false;
+        boolean isPalindrome = true;
+        ArrayDeque<Character> deque = new ArrayDeque<>();
+        for (char i : input.toLowerCase().toCharArray()){
+            deque.addLast(i);
+        }
+        while (deque.size() > 1){
+            if(deque.removeFirst() != deque.removeLast()){
+                isPalindrome = false;
+                break;
+            }
+        }
 
         System.out.println(isPalindrome ? "Yes" : "No");
     }
@@ -85,6 +116,14 @@ public class Assignment5_StringManipulation {
 
         // TODO: Подсчитать количество слов в предложении
         int wordCount = 0;
+        String[] words = sentence.split("\\s+");
+        ArrayList<String> wordList = new ArrayList<>();
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                wordList.add(word);
+            }
+        }
+        wordCount = wordList.size();
 
         System.out.println("Number of words: " + wordCount);
     }
@@ -96,6 +135,17 @@ public class Assignment5_StringManipulation {
 
         // TODO: Удалить все пробелы из строки
         String noSpaces = "";
+        StringBuilder sb = new StringBuilder();
+        for(char c : input.toCharArray()){
+            if(c != ' '){
+                sb.append(c);
+            }
+        }
+        noSpaces = sb.toString();
+
+
+        String versionB = input.replaceAll(" ", "");
+
 
         System.out.println(noSpaces);
     }
@@ -108,6 +158,18 @@ public class Assignment5_StringManipulation {
         // TODO: Преобразовать первую букву каждого слова в заглавную
         String result = "";
 
+        String[] words = sentence.split("\\s+");
+        StringBuilder sb = new StringBuilder();
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                sb.append(Character.toUpperCase(word.charAt(0)));
+                if (word.length() > 1) {
+                    sb.append(word.substring(1).toLowerCase());
+                }
+                sb.append(" ");
+            }
+        }
+        result = sb.toString().trim();
         System.out.println(result);
     }
 
@@ -118,7 +180,17 @@ public class Assignment5_StringManipulation {
 
         // TODO: Найти символ, который встречается чаще всего
         char mostFrequent = ' ';
-
+        HashMap<Character, Integer> frequencyMap = new HashMap<>();
+        for (char c : input.toCharArray()) {
+            frequencyMap.put(c, frequencyMap.getOrDefault(c, 0) + 1);
+        }
+        int maxFrequency = 0;
+        for (char c : frequencyMap.keySet()) {
+            if (frequencyMap.get(c) > maxFrequency) {
+                maxFrequency = frequencyMap.get(c);
+                mostFrequent = c;
+            }
+        }
         System.out.println("The most frequent character is: " + mostFrequent);
     }
 
@@ -131,6 +203,24 @@ public class Assignment5_StringManipulation {
 
         // TODO: Проверить, являются ли две строки анаграммами (игнорировать пробелы и регистр)
         boolean areAnagrams = false;
+        HashMap<Character , Integer> m1 = new HashMap<>();
+        HashMap<Character , Integer > m2 = new HashMap<>();
+
+        for(char i : str1.toCharArray()){
+            m1.put(i,m1.getOrDefault(i,0)+1);
+        }
+        for(char k : str2.toCharArray()){
+            m2.put(k,m2.getOrDefault(k,0)+1);
+        }
+
+        System.out.println(m1.equals(m2));
+
+        char[] arr1 = str1.replaceAll("\\s+", "").toLowerCase().toCharArray();
+        char[] arr2 = str2.replaceAll("\\s+", "").toLowerCase().toCharArray();
+
+        System.out.println(arr1.equals(arr2));
+
+
 
         System.out.println(areAnagrams ? "Yes" : "No");
     }
